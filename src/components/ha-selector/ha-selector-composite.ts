@@ -42,7 +42,7 @@ export class HaCompositeSelector extends LitElement {
   ) => string;
 
   private _computeLabel = (schema: HaFormSchema): string => {
-    if (!this.selector.composite?.schema) {
+    if (!this.selector.composite) {
       return schema.name;
     }
     const field = this.selector.composite.schema[schema.name];
@@ -50,7 +50,7 @@ export class HaCompositeSelector extends LitElement {
   };
 
   private _computeHelper = (schema: HaFormSchema): string => {
-    if (!this.selector.composite?.schema) {
+    if (!this.selector.composite) {
       return "";
     }
     const field = this.selector.composite.schema[schema.name];
@@ -58,7 +58,7 @@ export class HaCompositeSelector extends LitElement {
   };
 
   private _renderItem(item: any, index: number) {
-    if (!this.selector.composite?.schema) {
+    if (!this.selector.composite) {
       return nothing;
     }
 
@@ -104,7 +104,7 @@ export class HaCompositeSelector extends LitElement {
   }
 
   protected render() {
-    if (!this.selector.composite?.schema) {
+    if (!this.selector.composite) {
       return nothing;
     }
 
@@ -144,7 +144,7 @@ export class HaCompositeSelector extends LitElement {
   }
 
   private _schema = memoizeOne((selector: CompositeSelector) => {
-    if (!selector.composite || !selector.composite.schema) {
+    if (!selector.composite) {
       return [];
     }
     return Object.entries(selector.composite.schema).map(([key, field]) => ({
@@ -173,7 +173,7 @@ export class HaCompositeSelector extends LitElement {
 
     // Prepare initial data with defaults
     const initialData = {};
-    if (this.selector.composite?.schema) {
+    if (this.selector.composite) {
       Object.entries(this.selector.composite.schema).forEach(([key, field]) => {
         if (field.default !== undefined) {
           initialData[key] = field.default;

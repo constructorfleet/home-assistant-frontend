@@ -161,7 +161,7 @@ interface CompositeSelectorField {
 
 export interface CompositeSelector {
   composite?: {
-    schema?: Record<string, CompositeSelectorField>;
+    schema: Record<string, CompositeSelectorField>;
     multiple?: boolean;
   } | null;
 }
