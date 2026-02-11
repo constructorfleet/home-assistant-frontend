@@ -34,6 +34,7 @@ export type Selector =
   | ChooseSelector
   | ColorRGBSelector
   | ColorTempSelector
+  | CompositeSelector
   | ConditionSelector
   | ConversationAgentSelector
   | ConfigEntrySelector
@@ -144,6 +145,24 @@ export interface ColorTempSelector {
     max?: number;
     min_mireds?: number;
     max_mireds?: number;
+  } | null;
+}
+
+interface CompositeSelectorField {
+  selector: Selector;
+  label?: string;
+  description?: string;
+  name?: string;
+  required?: boolean;
+  advanced?: boolean;
+  default?: any;
+  example?: any;
+}
+
+export interface CompositeSelector {
+  composite?: {
+    schema?: Record<string, CompositeSelectorField>;
+    multiple?: boolean;
   } | null;
 }
 
