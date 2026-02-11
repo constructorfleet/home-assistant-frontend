@@ -62,7 +62,34 @@ export class HaCompositeSelector extends LitElement {
       return nothing;
     }
 
-    const firstFieldKey = Object.keys(this.selector.composite.schema)[0];
+    const schemaKeys = Object.keys(this.selector.composite.schema);
+    // Handle empty schema case
+    if (schemaKeys.length === 0) {
+      return html`
+        <ha-md-list-item class="item">
+          <div slot="headline" class="label">${JSON.stringify(item)}</div>
+          <ha-icon-button
+            slot="end"
+            .item=${item}
+            .index=${index}
+            .label=${this.hass.localize("ui.common.edit")}
+            .path=${mdiPencil}
+            .disabled=${this.disabled}
+            @click=${this._editItem}
+          ></ha-icon-button>
+          <ha-icon-button
+            slot="end"
+            .index=${index}
+            .label=${this.hass.localize("ui.common.delete")}
+            .path=${this.selector.composite.multiple ? mdiDelete : mdiClose}
+            .disabled=${this.disabled}
+            @click=${this._deleteItem}
+          ></ha-icon-button>
+        </ha-md-list-item>
+      `;
+    }
+
+    const firstFieldKey = schemaKeys[0];
     const firstField = this.selector.composite.schema[firstFieldKey];
     const labelSelector = firstField.selector;
 
@@ -89,6 +116,7 @@ export class HaCompositeSelector extends LitElement {
           .index=${index}
           .label=${this.hass.localize("ui.common.edit")}
           .path=${mdiPencil}
+          .disabled=${this.disabled}
           @click=${this._editItem}
         ></ha-icon-button>
         <ha-icon-button
@@ -96,6 +124,7 @@ export class HaCompositeSelector extends LitElement {
           .index=${index}
           .label=${this.hass.localize("ui.common.delete")}
           .path=${multiple ? mdiDelete : mdiClose}
+          .disabled=${this.disabled}
           @click=${this._deleteItem}
         ></ha-icon-button>
       </ha-md-list-item>
@@ -115,13 +144,18 @@ export class HaCompositeSelector extends LitElement {
           <ha-sortable
             handle-selector=".handle"
             draggable-selector=".item"
+            .disabled=${this.disabled}
             @item-moved=${this._itemMoved}
           >
             <ha-md-list>
               ${items.map((item, index) => this._renderItem(item, index))}
             </ha-md-list>
           </ha-sortable>
-          <ha-button appearance="filled" @click=${this._addItem}>
+          <ha-button
+            appearance="filled"
+            .disabled=${this.disabled}
+            @click=${this._addItem}
+          >
             ${this.hass.localize("ui.common.add")}
           </ha-button>
         </div>
@@ -134,7 +168,11 @@ export class HaCompositeSelector extends LitElement {
         ${this.value
           ? html`<ha-md-list> ${this._renderItem(this.value, 0)} </ha-md-list>`
           : html`
-              <ha-button appearance="filled" @click=${this._addItem}>
+              <ha-button
+                appearance="filled"
+                .disabled=${this.disabled}
+                @click=${this._addItem}
+              >
                 ${this.hass.localize("ui.common.add")}
               </ha-button>
             `}
@@ -155,6 +193,9 @@ export class HaCompositeSelector extends LitElement {
   });
 
   private _itemMoved(ev) {
+    if (this.disabled) {
+      return;
+    }
     ev.stopPropagation();
     const newIndex = ev.detail.newIndex;
     const oldIndex = ev.detail.oldIndex;
@@ -168,6 +209,9 @@ export class HaCompositeSelector extends LitElement {
   }
 
   private async _addItem(ev) {
+    if (this.disabled) {
+      return;
+    }
     ev.stopPropagation();
 
     // Prepare initial data with defaults
@@ -204,6 +248,9 @@ export class HaCompositeSelector extends LitElement {
   }
 
   private async _editItem(ev) {
+    if (this.disabled) {
+      return;
+    }
     ev.stopPropagation();
     const item = ev.currentTarget.item;
     const index = ev.currentTarget.index;
@@ -232,6 +279,9 @@ export class HaCompositeSelector extends LitElement {
   }
 
   private _deleteItem(ev) {
+    if (this.disabled) {
+      return;
+    }
     ev.stopPropagation();
     const index = ev.currentTarget.index;
 
