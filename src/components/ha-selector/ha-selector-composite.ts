@@ -70,11 +70,10 @@ export class HaCompositeSelector extends LitElement {
       ? formatSelectorValue(this.hass, item[firstFieldKey], labelSelector)
       : "";
 
-    const reorderable = this.selector.composite.multiple || false;
     const multiple = this.selector.composite.multiple || false;
     return html`
       <ha-md-list-item class="item">
-        ${reorderable
+        ${multiple
           ? html`
               <ha-svg-icon
                 class="handle"
