@@ -473,6 +473,61 @@ const SCHEMAS: {
           },
         },
       },
+      composite: {
+        name: "Composite",
+        selector: {
+          composite: {
+            schema: {
+              name: {
+                label: "Name",
+                selector: { text: {} },
+                required: true,
+              },
+              entity: {
+                label: "Entity",
+                selector: { entity: {} },
+                required: true,
+              },
+              brightness: {
+                label: "Brightness",
+                selector: {
+                  number: {
+                    mode: "slider",
+                    min: 0,
+                    max: 100,
+                    unit_of_measurement: "%",
+                  },
+                },
+                default: 50,
+              },
+            },
+          },
+        },
+      },
+      composite_multiple: {
+        name: "Composite Multiple",
+        selector: {
+          composite: {
+            multiple: true,
+            schema: {
+              device: {
+                label: "Device",
+                selector: { device: {} },
+                required: true,
+              },
+              action: {
+                label: "Action",
+                selector: {
+                  select: {
+                    options: ["on", "off", "toggle"],
+                  },
+                },
+                default: "on",
+              },
+            },
+          },
+        },
+      },
     },
   },
 ];
